@@ -14,7 +14,15 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @account = Account.find(params[:id])
+    # @account = Account.find(params[:id])
+    if !session[:account_id]
+      redirect_to new_session_path
+      return
+    end
+    if params[:id] != current_account.id.to_s
+      flash[:error]="You may not access another user's data"
+    end
+    @account = current_account
   end
 
   private
